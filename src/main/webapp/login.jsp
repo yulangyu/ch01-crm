@@ -54,10 +54,9 @@
 					    data
 					       {"success":true/false,"msg":"哪儿出错误了"}
 					*/
-
 					//如果登录成功
 					if (data.success){
-                       window.location.href="workbench/index.html";
+                       window.location.href="workbench/index.jsp";
 					//如果登陆失败
 					}else{
 						$("#msg").html(data.msg);

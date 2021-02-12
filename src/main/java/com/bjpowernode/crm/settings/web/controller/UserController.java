@@ -35,9 +35,9 @@ public class UserController extends HttpServlet {
         loginPwd = MD5Util.getMD5(loginPwd);
         //接受浏览器端的IP地址
         String ip = request.getRemoteAddr();
+        System.out.println(ip);
         //未来业务层开发，统一使用代理形态的接口对象
         UserService us = (UserService) ServiceFactory.getService(new UserServiceImpl());
-
 
         try{
             User user = us.login(loginAct,loginPwd,ip);
@@ -52,6 +52,5 @@ public class UserController extends HttpServlet {
             PrintJson.printJsonObj(response,map);
         }
     }
-
 
 }

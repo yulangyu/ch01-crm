@@ -3,6 +3,7 @@
   <component name="ProjectModuleManager">
     <modules>
       <module fileurl="file://$PROJECT_DIR$/ch01-crm.iml" filepath="$PROJECT_DIR$/ch01-crm.iml" />
+      <module fileurl="file://$PROJECT_DIR$/../ch02-crmwrong/ch02-crmwrong.iml" filepath="$PROJECT_DIR$/../ch02-crmwrong/ch02-crmwrong.iml" />
     </modules>
   </component>
 </project>
