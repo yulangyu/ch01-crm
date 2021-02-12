@@ -3,7 +3,7 @@
 String basePath = request.getScheme() + "://" + request.getServerName() + ":"
 		+ request.getServerPort() + request.getContextPath() + "/";
 %>
-
+<%@ page isELIgnored="false" %><%--阻止jsp忽略el表达式--%>
 <html>
 <head>
 	<base href="<%=basePath%>" />

@@ -2,7 +2,12 @@
  "-//Sun Microsystems, Inc.//DTD Web Application 2.3//EN"
  "http://java.sun.com/dtd/web-app_2_3.dtd" >
 
-<web-app>
+<web-app xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+         xmlns="http://java.sun.com/xml/ns/javaee"
+         xsi:schemaLocation="http://java.sun.com/xml/ns/javaee http://java.sun.com/xml/ns/javaee/web-app_2_5.xsd"
+         id="WebApp_ID" version="2.5">
+
+
   <filter>
     <filter-name>EncodingFilter</filter-name>
     <filter-class>com.bjpowernode.crm.web.filter.EncodingFilter</filter-class>
@@ -11,6 +16,18 @@
     <filter-name>EncodingFilter</filter-name>
     <url-pattern>*.do</url-pattern><!--除了*.do其余的都要加/-->
   </filter-mapping>
+
+  <filter>
+    <filter-name>LoginFilter</filter-name>
+    <filter-class>com.bjpowernode.crm.web.filter.LoginFilter</filter-class>
+  </filter>
+  <filter-mapping>
+    <filter-name>LoginFilter</filter-name>
+    <url-pattern>*.do</url-pattern><!--除了*.do其余的都要加/-->
+    <url-pattern>*.jsp</url-pattern>
+  </filter-mapping>
+
+
   <servlet>
     <servlet-name>UserController</servlet-name>
     <servlet-class>com.bjpowernode.crm.settings.web.controller.UserController</servlet-class>
