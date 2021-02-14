@@ -28,7 +28,7 @@
 
 
     <mappers>
-
+<!--批量注册-->
         <package name="com.bjpowernode.crm.settings.dao"/>
         <package name="com.bjpowernode.crm.workbench.dao"/>
 

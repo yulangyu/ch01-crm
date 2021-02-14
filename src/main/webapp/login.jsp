@@ -8,6 +8,10 @@
 <script type="text/javascript" src="jquery/bootstrap_3.3.0/js/bootstrap.min.js"></script>
 	<script>
 		$(function () {
+
+			if (window.top!=window){
+				window.top.location=window.location;
+			}
         //alert("??????????????????");
 			//页面加载玩不后，清空用户文本内容
 			$("#loginAct").val("");
