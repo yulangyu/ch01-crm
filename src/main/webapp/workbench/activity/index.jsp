@@ -15,6 +15,10 @@ String basePath = request.getScheme() + "://" + request.getServerName() + ":"
 <script type="text/javascript" src="jquery/bootstrap_3.3.0/js/bootstrap.min.js"></script>
 <script type="text/javascript" src="jquery/bootstrap-datetimepicker-master/js/bootstrap-datetimepicker.js"></script>
 <script type="text/javascript" src="jquery/bootstrap-datetimepicker-master/locale/bootstrap-datetimepicker.zh-CN.js"></script>
+<%--分页插件--%>
+<link rel="stylesheet" type="text/css" href="jquery/bs_pagination/jquery.bs_pagination.min.css">
+<script type="text/javascript" src="jquery/bs_pagination/jquery.bs_pagination.min.js"></script>
+<script type="text/javascript" src="jquery/bs_pagination/en.js"></script>
 
 <script type="text/javascript">
 
@@ -28,7 +32,7 @@ String basePath = request.getScheme() + "://" + request.getServerName() + ":"
 				autoclose: true,
 				todayBtn: true,
 				pickerPosition: "bottom-left"
-			});
+			})
 			//alert("123");
 
 			//走后台，拿取数据
@@ -53,59 +57,65 @@ String basePath = request.getScheme() + "://" + request.getServerName() + ":"
 				}
 			})
 
-			//为保存绑定按钮事件，执行添加操作
-			$("#saveBtn").click(function () {
-                $.ajax({
-					url:"workbench/activity/save.do",
-					data:{
-						"owner":$.trim($("#create-owner").val()),
-						"name":$.trim($("#create-name").val()),
-						"startDate":$.trim($("#create-startDate").val()),
-						"endDate":$.trim($("#create-endDate").val()),
-						"cost":$.trim($("#create-cost").val()),
-						"description":$.trim($("#create-description").val()),
-					},
-					type:"post",
-					dataType: "json",
-					success:function (data) {
-                     if (data.success){
-                        //添加成功后
+		})
+
+
+		//为保存绑定按钮事件，执行添加操作(千万不能写在addBtn事件按钮里面)
+		$("#saveBtn").click(function () {
+			$.ajax({
+				url:"workbench/activity/save.do",
+				data:{
+					"owner":$.trim($("#create-owner").val()),
+					"name":$.trim($("#create-name").val()),
+					"startDate":$.trim($("#create-startDate").val()),
+					"endDate":$.trim($("#create-endDate").val()),
+					"cost":$.trim($("#create-cost").val()),
+					"description":$.trim($("#create-description").val()),
+				},
+				type:"post",
+				dataType: "json",
+				success:function (data) {
+					if (data.success){
+
+						//添加成功后
 						//刷新市场活动信息列表(局部刷新)
 
-						 /*
+						/*
 
-							注意：
-								我们拿到了form表单的jquery对象
-								对于表单的jquery对象，提供了submit()方法让我们提交表单
-								但是表单的jquery对象，没有为我们提供reset()方法让我们重置表单（坑：idea为我们提示了有reset()方法）
+                           注意：
+                               我们拿到了form表单的jquery对象
+                               对于表单的jquery对象，提供了submit()方法让我们提交表单
+                               但是表单的jquery对象，没有为我们提供reset()方法让我们重置表单（坑：idea为我们提示了有reset()方法）
 
-								虽然jquery对象没有为我们提供reset方法，但是原生js为我们提供了reset方法
-								所以我们要将jquery对象转换为原生dom对象
+                               虽然jquery对象没有为我们提供reset方法，但是原生js为我们提供了reset方法
+                               所以我们要将jquery对象转换为原生dom对象
 
-								jquery对象转换为dom对象：
-									jquery对象[下标]
+                               jquery对象转换为dom对象：
+                                   jquery对象[下标]
 
-								dom对象转换为jquery对象：
-									$(dom)
+                               dom对象转换为jquery对象：
+                                   $(dom)
 
-						 */
+                        */
 
-                         //清空添加操作模态窗口中的数据
-						 $("#activityAddForm")[0].reset();
+						//清空添加操作模态窗口中的数据
+						$("#activityAddForm")[0].reset();
 
 						//关闭模态窗口
-						 $("#createActivityModal").modal("hide");
+						$("#createActivityModal").modal("hide");
 
-						 //alert("添加成功");
+						alert("添加成功");
+						//return false;
 
-
-					 }else{
-                     	alert("添加市场活动失败");
-					 }
-					 }
-				})
+					}else{
+						alert("添加市场活动失败");
+					}
+				}
 			})
+
 		})
+
+
 		pageList(1,2);
 
 		//为查询按钮绑定事件，触发pageList方法
@@ -139,6 +149,29 @@ String basePath = request.getScheme() + "://" + request.getServerName() + ":"
 					html += '</tr>';
 				})
 				$("#activityBody").html(html);
+
+                //计算总页数
+				totalPages = data.total%pageSize==0?data.total%pageSize:parseInt(data.total%pageSize)+1;
+                //数据处理完毕后，结合分页查询，对前端展现分页信息
+				$("#activityPage").bs_pagination({
+					currentPage: pageNo, // 页码
+					rowsPerPage: pageSize, // 每页显示的记录条数
+					maxRowsPerPage: 20, // 每页最多显示的记录条数
+					totalPages: totalPages, // 总页数
+					totalRows: data.total, // 总记录条数
+
+					visiblePageLinks: 3, // 显示几个卡片
+
+					showGoToPage: true,
+					showRowsPerPage: true,
+					showRowsInfo: true,
+					showRowsDefaultInfo: true,
+                    //该回调函数是在点击分页组件时触发的
+					onChangePage : function(event, data){
+						pageList(data.currentPage , data.rowsPerPage);
+					}
+				});
+
 			}
 		})
 	}
@@ -383,8 +416,8 @@ String basePath = request.getScheme() + "://" + request.getServerName() + ":"
 					</div>
 					<button type="button" class="btn btn-default" style="cursor: default;">条/页</button>
 				</div>
-				<div style="position: relative;top: -88px; left: 285px;">
-					<nav>
+				<%--<div style="position: relative;top: -88px; left: 285px;">
+					&lt;%&ndash;<nav>
 						<ul class="pagination">
 							<li class="disabled"><a href="#">首页</a></li>
 							<li class="disabled"><a href="#">上一页</a></li>
@@ -396,8 +429,10 @@ String basePath = request.getScheme() + "://" + request.getServerName() + ":"
 							<li><a href="#">下一页</a></li>
 							<li class="disabled"><a href="#">末页</a></li>
 						</ul>
-					</nav>
-				</div>
+					</nav>&ndash;%&gt;
+				</div>--%>
+
+				<div id="activityPage"></div>
 			</div>
 			
 		</div>

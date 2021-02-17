@@ -26,6 +26,7 @@ public class ActivityServiceImpl implements ActivityService {
     public PagenationVo<Activity> pageList(Map<String, Object> map) {
         //取得total
         int total = activityDao.getTotalByCondition(map);
+        System.out.println("查询到的总条数"+total);
         //取得vo
         List<Activity> dataList = activityDao.getActivityListByCondition(map);
         //创建一个vo对象，将total和List封装进vo当中
