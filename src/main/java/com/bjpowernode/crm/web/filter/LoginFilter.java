@@ -18,6 +18,7 @@ public class LoginFilter implements Filter {
         User user = (User) session.getAttribute("user");
         System.out.println(request.getContextPath());
         String path = request.getServletPath();
+        System.out.println("context地址----------->"+request.getContextPath());
         System.out.println("相对地址：------------>"+path);
 
         if ("/settings/user/login.do".equals(path) || "/login.jsp".equals(path)){
