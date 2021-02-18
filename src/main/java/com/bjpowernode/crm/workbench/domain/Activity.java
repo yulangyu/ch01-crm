@@ -5,7 +5,7 @@ public class Activity {
     private String owner;//市场活动所有者 外键 关联tbl_user
     private String name;//市场活动名称
     private String startDate;//开始时间
-    private String endDate;//借宿日期
+    private String endDate;//结束日期
     private String cost;//成本
     private String description;//描述
     private String createTime;//创建时间  年月日时分秒

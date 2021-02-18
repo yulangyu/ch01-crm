@@ -1,18 +1,14 @@
 package com.bjpowernode.crm.workbench.web.controller;
 
-
-
 import com.bjpowernode.crm.settings.domain.User;
 import com.bjpowernode.crm.settings.service.UserService;
 import com.bjpowernode.crm.settings.service.impl.UserServiceImpl;
-import com.bjpowernode.crm.utils.DateTimeUtil;
-import com.bjpowernode.crm.utils.PrintJson;
-import com.bjpowernode.crm.utils.ServiceFactory;
-import com.bjpowernode.crm.utils.UUIDUtil;
+import com.bjpowernode.crm.utils.*;
 import com.bjpowernode.crm.vo.PagenationVo;
 import com.bjpowernode.crm.workbench.domain.Activity;
 import com.bjpowernode.crm.workbench.service.ActivityService;
 import com.bjpowernode.crm.workbench.service.impl.ActivityServiceImpl;
+
 import javax.servlet.ServletException;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
@@ -33,7 +29,59 @@ public class ActivityController extends HttpServlet {
              save(request,response);
         }else if ("/workbench/activity/pageList.do".equals(path)){
              pageList(request,response);
+        }else if ("/workbench/activity/delete.do".equals(path)){
+             delete(request,response);
+        }else if ("/workbench/activity/getUserListAndActivity.do".equals(path)){
+            getUserListAndActivity(request,response);
+        }else if ("/workbench/activity/update.do".equals(path)){
+            update(request,response);
         }
+    }
+
+    private void update(HttpServletRequest request, HttpServletResponse response) {
+        System.out.println("执行市场活动修改操作");
+        String id = request.getParameter("id");
+        String owner = request.getParameter("owner");
+        String name = request.getParameter("name");
+        String startDate = request.getParameter("startDate");
+        String endDate = request.getParameter("endDate");
+        String cost = request.getParameter("cost");
+        String description = request.getParameter("description");
+        //修改系统时间
+        String editTime = DateTimeUtil.getSysTime();
+        //修改人姓名:当前登录用户
+        String editBy = ((User) request.getSession().getAttribute("user")).getName();
+        //封装进一个Activity方便管理
+        Activity activity = new Activity();
+        activity.setId(id);
+        activity.setOwner(owner);
+        activity.setName(name);
+        activity.setStartDate(startDate);
+        activity.setEndDate(endDate);
+        activity.setCost(cost);
+        activity.setDescription(description);
+        activity.setEditTime(editTime);
+        activity.setEditBy(editBy);
+        ActivityService as = (ActivityService) ServiceFactory.getService(new ActivityServiceImpl());
+        boolean flag = as.update(activity);
+        PrintJson.printJsonFlag(response,flag);
+    }
+
+    private void getUserListAndActivity(HttpServletRequest request, HttpServletResponse response) {
+        System.out.println("进入到查询用户信息列表和根据市场活动id查询单条记录的操作");
+        String id =request.getParameter("id");
+        System.out.println("需要修改记录的id===="+id);
+        ActivityService activityService = (ActivityService) ServiceFactory.getService(new ActivityServiceImpl());
+        Map<String,Object> map =activityService.getUserListAndActivity(id);
+        PrintJson.printJsonObj(response,map);
+    }
+
+    private void delete(HttpServletRequest request, HttpServletResponse response) {
+        System.out.println("执行市场活动删除操作");
+        String ids[] = request.getParameterValues("id");
+        ActivityService as = (ActivityService) ServiceFactory.getService(new ActivityServiceImpl());
+        boolean flag = as.delete(ids);
+        PrintJson.printJsonFlag(response,flag);
     }
 
     private void pageList(HttpServletRequest request, HttpServletResponse response) {
