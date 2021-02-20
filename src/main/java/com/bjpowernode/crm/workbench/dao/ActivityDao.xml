@@ -3,6 +3,26 @@
         PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
         "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 <mapper namespace="com.bjpowernode.crm.workbench.dao.ActivityDao">
+    <select id="detail" resultType="Activity">
+        select
+        a.id,
+        u.name as owner,
+        a.name,
+        a.startDate,
+        a.endDate,
+        a.cost,
+        a.description,
+        a.createTime,
+        a.createBy,
+        a.editTime,
+        a.editBy
+
+        from tbl_activity a
+        join tbl_user u
+        on a.owner=u.id
+        where a.id=#{id}
+
+    </select>
     <update id="update">
         update tbl_activity set
         owner=#{owner},

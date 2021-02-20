@@ -6,6 +6,7 @@ import com.bjpowernode.crm.settings.service.impl.UserServiceImpl;
 import com.bjpowernode.crm.utils.*;
 import com.bjpowernode.crm.vo.PagenationVo;
 import com.bjpowernode.crm.workbench.domain.Activity;
+import com.bjpowernode.crm.workbench.domain.ActivityRemark;
 import com.bjpowernode.crm.workbench.service.ActivityService;
 import com.bjpowernode.crm.workbench.service.impl.ActivityServiceImpl;
 
@@ -35,7 +36,87 @@ public class ActivityController extends HttpServlet {
             getUserListAndActivity(request,response);
         }else if ("/workbench/activity/update.do".equals(path)){
             update(request,response);
+        }else if ("/workbench/activity/detail.do".equals(path)){
+            detail(request,response);
+        }else if ("/workbench/activity/getRemarkListById.do".equals(path)){
+            getRemarkListById(request,response);
+        }else if ("/workbench/activity/deleteRemarkById.do".equals(path)){
+            deleteRemarkById(request,response);
+        }else if ("/workbench/activity/saveRemark.do".equals(path)){
+            saveRemark(request,response);
+        }else if ("/workbench/activity/editRemark.do".equals(path)){
+            editRemark(request,response);
         }
+        
+    }
+
+    private void editRemark(HttpServletRequest request, HttpServletResponse response) {
+        System.out.println("进入到修改备注信息");
+        String id=request.getParameter("id");
+        String noteContent=request.getParameter("noteContent");
+        String editTime=DateTimeUtil.getSysTime();
+        String editBy=request.getParameter("editBy");
+        String editFlag="1";
+        ActivityRemark ar = new ActivityRemark();
+        ar.setId(id);
+        ar.setNoteContent(noteContent);
+        ar.setEditTime(editTime);
+        ar.setEditBy(editBy);
+        ar.setEditFlag(editFlag);
+        ActivityService as = (ActivityService) ServiceFactory.getService(new ActivityServiceImpl());
+        boolean flag = as.editRemark(ar);
+        Map<String,Object> map = new HashMap<String,Object>();
+        map.put("ar",ar);
+        map.put("success",flag);
+        PrintJson.printJsonObj(response,map);
+    }
+
+    private void saveRemark(HttpServletRequest request, HttpServletResponse response) {
+        System.out.println("进入到添加备注信息列表");
+        String id=UUIDUtil.getUUID();
+        String noteContent=request.getParameter("noteContent");
+        String createTime =DateTimeUtil.getSysTime();
+        String createBy=request.getParameter("createBy");
+        String editFlag="0";
+        String activityId=request.getParameter("activityId");
+        ActivityRemark ar = new ActivityRemark();
+        ar.setId(id);
+        ar.setNoteContent(noteContent);
+        ar.setCreateTime(createTime);
+        ar.setCreateBy(createBy);
+        ar.setEditFlag(editFlag);
+        ar.setActivityId(activityId);
+        ActivityService as = (ActivityService) ServiceFactory.getService(new ActivityServiceImpl());
+        boolean flag = as.saveRemark(ar);
+        Map<String,Object> map = new HashMap<String,Object>();
+        map.put("ar",ar);
+        map.put("success",flag);
+        PrintJson.printJsonObj(response,map);
+    }
+
+    private void deleteRemarkById(HttpServletRequest request, HttpServletResponse response) {
+        String id = request.getParameter("id");
+        ActivityService as = (ActivityService) ServiceFactory.getService(new ActivityServiceImpl());
+        boolean flag = as.deleteRemarkById(id);
+        PrintJson.printJsonFlag(response,flag);
+    }
+
+    private void getRemarkListById(HttpServletRequest request, HttpServletResponse response) {
+        System.out.println("进入到根据市场活动id，取得备注信息列表");
+        String activityId = request.getParameter("activityId");
+        System.out.println("该市场活动的id是："+activityId);
+        ActivityService as = (ActivityService) ServiceFactory.getService(new ActivityServiceImpl());
+        List<ActivityRemark> arList = as.getRemarkListById(activityId);
+        PrintJson.printJsonObj(response,arList);
+    }
+
+    private void detail(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
+        System.out.println("进入到跳转详情页的操作");
+        String id = request.getParameter("id");
+        ActivityService as = (ActivityService) ServiceFactory.getService(new ActivityServiceImpl());
+        Activity a =  as.detail(id);
+        request.setAttribute("a",a);
+        request.getRequestDispatcher("/workbench/activity/detail.jsp").forward(request,response);
     }
 
     private void update(HttpServletRequest request, HttpServletResponse response) {

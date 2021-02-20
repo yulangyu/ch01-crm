@@ -7,6 +7,7 @@ import com.bjpowernode.crm.vo.PagenationVo;
 import com.bjpowernode.crm.workbench.dao.ActivityDao;
 import com.bjpowernode.crm.workbench.dao.ActivityRemarkDao;
 import com.bjpowernode.crm.workbench.domain.Activity;
+import com.bjpowernode.crm.workbench.domain.ActivityRemark;
 import com.bjpowernode.crm.workbench.service.ActivityService;
 
 import java.util.HashMap;
@@ -18,6 +19,50 @@ public class ActivityServiceImpl implements ActivityService {
     private ActivityDao activityDao = SqlSessionUtil.getSqlSession().getMapper(ActivityDao.class);
     private ActivityRemarkDao activityRemarkDao = SqlSessionUtil.getSqlSession().getMapper(ActivityRemarkDao.class);
     private UserDao userDao = SqlSessionUtil.getSqlSession().getMapper(UserDao.class);
+
+    @Override
+    public boolean editRemark(ActivityRemark ar) {
+        boolean flag =true;
+        int count = activityRemarkDao.editRemark(ar);
+        if (count !=1){
+            flag=false;
+        }
+        return flag;
+    }
+
+    @Override
+    public boolean saveRemark(ActivityRemark ar) {
+        boolean flag = true;
+        int count = activityRemarkDao.saveRemark(ar);
+        if (count!=1){
+            flag = false;
+        }
+        return flag;
+    }
+
+    @Override
+    public boolean deleteRemarkById(String id) {
+        boolean flag = true;
+        int count = activityRemarkDao.deleteRemarkById(id);
+        if (count==1){
+            System.out.println("id为"+id+"删除成功");
+        }else{
+            flag =false;
+        }
+        return flag;
+    }
+
+    @Override
+    public List<ActivityRemark> getRemarkListById(String activityId) {
+        List<ActivityRemark> arList =  activityRemarkDao.getRemarkListById(activityId);
+        return arList;
+    }
+
+    @Override
+    public Activity detail(String id) {
+        Activity activity = activityDao.detail(id);
+        return activity;
+    }
 
     @Override
     public boolean update(Activity activity) {

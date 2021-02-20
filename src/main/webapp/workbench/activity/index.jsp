@@ -76,7 +76,18 @@ String basePath = request.getScheme() + "://" + request.getServerName() + ":"
 				dataType: "json",
 				success:function (data) {
 					if (data.success){
-                        pageList(1,2)
+                        //pageList(1,2)
+                        /*
+
+                        $("#activityPage").bs_pagination('getOption', 'currentPage')
+                            操作后停留在当前页
+                        $("#activityPage").bs_pagination('getOption', 'rowsPerPage')
+                            操作后维持已经设置好的每页展现的记录数
+
+                            这两个参数不需要进行任何修改，直接使用即可
+                         */
+						pageList(1,$("#activityPage").bs_pagination('getOption', 'rowsPerPage'));
+
 						//添加成功后
 						//刷新市场活动信息列表(局部刷新)
 
@@ -135,6 +146,14 @@ String basePath = request.getScheme() + "://" + request.getServerName() + ":"
 		})
 
 		//单点一个取消全选
+		/*
+
+			动态生成的元素，我们要以on方法的形式来触发事件
+
+			语法：
+				$(需要绑定元素的有效的外层元素).on(绑定事件的方式,需要绑定的元素的jquery对象,回调函数)
+
+		 */
 		$("#activityBody").on("click",$("input[name=xz]"),function () {
 			//alert("123")
 			$("#qx").prop("checked",$("input[name=xz]").length==$("input[name=xz]:checked".length))
@@ -170,7 +189,8 @@ String basePath = request.getScheme() + "://" + request.getServerName() + ":"
 						success:function (data) {
 							if(data.success){
 								alert("删除成功");
-								pageList(1,2);
+								//pageList(1,2);
+								pageList(1	,$("#activityPage").bs_pagination('getOption', 'rowsPerPage'));
 							}else{
 								alert("删除失败")
 							}
@@ -243,7 +263,9 @@ String basePath = request.getScheme() + "://" + request.getServerName() + ":"
 				dataType: "json",
 				success:function (data) {
 					if (data.success){
-                        pageList(1,2)
+                        //pageList(1,2)
+						pageList($("#activityPage").bs_pagination('getOption', 'currentPage')
+								,$("#activityPage").bs_pagination('getOption', 'rowsPerPage'));
 						//添加成功后
 						//刷新市场活动信息列表(局部刷新)
 
@@ -312,7 +334,7 @@ String basePath = request.getScheme() + "://" + request.getServerName() + ":"
                 $.each(data.dataList,function (i,n){
 				    html += '<tr class="active">';
 					html += '<td><input type="checkbox" name="xz" value="'+n.id+'" /></td>';
-					html += '<td><a style="text-decoration: none; cursor: pointer;" onclick="window.location.href=\'workbench/activity/detail.jsp\';">'+n.name+'</a></td>';
+					html += '<td><a style="text-decoration: none; cursor: pointer;" onclick="window.location.href=\'workbench/activity/detail.do?id='+n.id+'\';">'+n.name+'</a></td>';
 					html += '<td>'+n.owner+'</td>';
 					html += '<td>'+n.startDate+'</td>';
 					html += '<td>'+n.endDate+'</td>';
