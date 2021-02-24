@@ -6,6 +6,7 @@ import com.bjpowernode.crm.utils.SqlSessionUtil;
 import com.bjpowernode.crm.vo.PagenationVo;
 import com.bjpowernode.crm.workbench.dao.ActivityDao;
 import com.bjpowernode.crm.workbench.dao.ActivityRemarkDao;
+import com.bjpowernode.crm.workbench.dao.ClueActivityRelationDao;
 import com.bjpowernode.crm.workbench.domain.Activity;
 import com.bjpowernode.crm.workbench.domain.ActivityRemark;
 import com.bjpowernode.crm.workbench.service.ActivityService;
@@ -19,6 +20,36 @@ public class ActivityServiceImpl implements ActivityService {
     private ActivityDao activityDao = SqlSessionUtil.getSqlSession().getMapper(ActivityDao.class);
     private ActivityRemarkDao activityRemarkDao = SqlSessionUtil.getSqlSession().getMapper(ActivityRemarkDao.class);
     private UserDao userDao = SqlSessionUtil.getSqlSession().getMapper(UserDao.class);
+    private ClueActivityRelationDao clueActivityRelationDao = SqlSessionUtil.getSqlSession().getMapper(ClueActivityRelationDao.class);
+
+    @Override
+    public List<Activity> getActivityByName(String aname) {
+        System.out.println("进入到查询市场活动（根据名字模糊查询）");
+        List<Activity> aList =  activityDao.getActivityByName(aname);
+        return aList;
+    }
+
+    @Override
+    public List<Activity> getActivityByIdAndNotByClueId(Map<String, Object> map) {
+        List<Activity> aList = activityDao.getActivityByIdAndNotByClueId(map);
+        return aList;
+    }
+
+    @Override
+    public boolean removeRelation(String id) {
+        boolean flag = true;
+        int count =clueActivityRelationDao.removeRelation(id);
+        if (count != 1){
+            flag=false;
+        }
+        return flag;
+    }
+
+    @Override
+    public List<Activity> getActivityIdByClueId(String clueId) {
+        List<Activity> aList = activityDao.getActivityIdByClueId(clueId);
+        return aList;
+    }
 
     @Override
     public boolean editRemark(ActivityRemark ar) {

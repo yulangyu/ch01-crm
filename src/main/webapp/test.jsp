@@ -11,6 +11,20 @@ String basePath = request.getScheme() + "://" + request.getServerName() + ":"
     <base href="<%=basePath%>" />
 
     <script type="application/javascript" src="jquery/jquery-1.11.1-min.js"></script>
+    <script>
+        $(function (){
+            //时间控件
+            $(".time").datetimepicker({
+                minView: "month",
+                language:  'zh-CN',
+                format: 'yyyy-mm-dd',
+                autoclose: true,
+                todayBtn: true,
+                pickerPosition: "bottom-left"
+            })
+        })
+        
+    </script>
 </head>
 <body>
 <script>

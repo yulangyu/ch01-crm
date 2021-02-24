@@ -46,10 +46,21 @@ public class ActivityController extends HttpServlet {
             saveRemark(request,response);
         }else if ("/workbench/activity/editRemark.do".equals(path)){
             editRemark(request,response);
+        }else if ("/workbench/clue/getActivityListByClueId.do".equals(path)){
+            getActivityListByClueId(request,response);
         }
         
     }
 
+    private void getActivityListByClueId(HttpServletRequest request, HttpServletResponse response) {
+        System.out.println("根据线索id查询市场关联活动");
+        String clueId = request.getParameter("id");
+        ActivityService as = (ActivityService) ServiceFactory.getService(new ActivityServiceImpl());
+        System.out.println(clueId);
+        List<Activity> aList = as.getActivityIdByClueId(clueId);
+        PrintJson.printJsonObj(response,aList);
+
+    }
     private void editRemark(HttpServletRequest request, HttpServletResponse response) {
         System.out.println("进入到修改备注信息");
         String id=request.getParameter("id");
@@ -111,7 +122,7 @@ public class ActivityController extends HttpServlet {
     }
 
     private void detail(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
-        System.out.println("进入到跳转详情页的操作");
+        System.out.println("进入到跳转市场活动详情页的操作");
         String id = request.getParameter("id");
         ActivityService as = (ActivityService) ServiceFactory.getService(new ActivityServiceImpl());
         Activity a =  as.detail(id);
