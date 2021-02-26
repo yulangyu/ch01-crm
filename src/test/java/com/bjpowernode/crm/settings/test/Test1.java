@@ -1,5 +1,6 @@
 package com.bjpowernode.crm.settings.test;
 
+import com.bjpowernode.crm.utils.DateTimeUtil;
 import com.bjpowernode.crm.utils.MD5Util;
 import org.junit.Test;
 
@@ -17,5 +18,11 @@ public class Test1 {
         System.out.println("2");
         System.out.println("3");
         System.out.println("4");
+    }
+
+    @Test
+    public void test03(){
+        String time = DateTimeUtil.getSysTime();
+        System.out.println(DateTimeUtil.getSysTime());
     }
 }

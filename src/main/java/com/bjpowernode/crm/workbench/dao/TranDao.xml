@@ -4,7 +4,135 @@
   "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 
 <mapper namespace="com.bjpowernode.crm.workbench.dao.TranDao">
-	
+    <insert id="saveTran">
+        insert into tbl_tran(
+        id,
+        owner,
+        money,
+        name,
+        expectedDate,
+        customerId,
+        stage,
+        type,
+        source,
+        activityId,
+        contactsId,
+        createBy,
+        createTime,
+        description,
+        contactSummary,
+        nextContactTime
+        )values(
+        #{id},
+        #{owner},
+        #{money},
+        #{name},
+        #{expectedDate},
+        #{customerId},
+        #{stage},
+        #{type},
+        #{source},
+        #{activityId},
+        #{contactsId},
+        #{createBy},
+        #{createTime},
+        #{description},
+        #{contactSummary},
+        #{nextContactTime}
+        )
+
+    </insert>
+    <select id="getUserList" resultType="User">
+        select * from tbl_user
+    </select>
+        <select id="detail" resultType="Tran">
+                select
+                 t.id,
+                 u.name as owner,
+                 t.money,
+                 t.name,
+                 t.expectedDate,
+                 c.name as customerId,
+                 t.stage,
+                 t.type,
+                 t.source,
+                 a.name as activityId,
+                 con.fullname as contactsId,
+                 t.createBy,
+                 t.createTime,
+                 t.editBy,
+                 t.editTime,
+                 t.description,
+                 t.contactSummary,
+                 t.nextContactTime
+                 from tbl_tran t
+                 join tbl_user u
+                 on t.owner=u.id
+                 join tbl_customer c
+                 on t.customerId=c.id
+                 left join tbl_contacts con
+                 on t.contactsId=con.id
+                 left join tbl_activity a
+                 on a.id=t.activityId
+                 where t.id=#{id}
+        </select>
+        <select id="showTranList" resultType="Tran">
+                select
+                t.id,
+                u.name as owner,
+                t.money,
+                t.name,
+                t.expectedDate,
+                c.name as customerId,
+                t.stage,
+                t.type,
+                t.source,
+                con.fullname as contactsId
+                from tbl_tran t
+                join tbl_user u
+                on t.owner=u.id
+                left join tbl_customer c
+                on t.customerId=c.id
+                left join tbl_contacts con
+                on t.contactsId=con.id
+        </select>
+	<insert id="save">
+        insert into tbl_tran (
+        id,
+        owner,
+        money,
+        name,
+        expectedDate,
+        customerId,
+        stage,
+        type,
+        source,
+        activityId,
+        contactsId,
+        createBy,
+        createTime,
+        description,
+        contactSummary,
+        nextContactTime
+        )values (
+        #{id},
+        #{owner},
+        #{money},
+        #{name},
+        #{expectedDate},
+        #{customerId},
+        #{stage},
+        #{type},
+        #{source},
+        #{activityId},
+        #{contactsId},
+        #{createBy},
+        #{createTime},
+        #{description},
+        #{contactSummary},
+        #{nextContactTime}
+        )
+    </insert>
   	
 </mapper>
 

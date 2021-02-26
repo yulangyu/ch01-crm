@@ -78,6 +78,20 @@
     <url-pattern>/workbench/clue/bund.do</url-pattern>
     <url-pattern>/workbench/clue/getActivityByName.do</url-pattern>
     <url-pattern>/workbench/clue/convert.do</url-pattern>
+  </servlet-mapping>
 
+  <!--线索控制器-->
+  <servlet>
+    <servlet-name>TranController</servlet-name>
+    <servlet-class>com.bjpowernode.crm.workbench.web.controller.TranController</servlet-class>
+  </servlet>
+  <servlet-mapping>
+    <servlet-name>TranController</servlet-name>
+    <url-pattern>/workbench/transaction/showTranList.do</url-pattern>
+    <url-pattern>/workbench/transaction/detail.do</url-pattern>
+    <url-pattern>/workbench/transaction/getUserList.do</url-pattern>
+    <url-pattern>/workbench/transaction/getCustomerName.do</url-pattern>
+    <url-pattern>/workbench/transaction/save.do</url-pattern>
+    <url-pattern>/workbench/transaction/showHistoryList.do</url-pattern>
   </servlet-mapping>
 </web-app>

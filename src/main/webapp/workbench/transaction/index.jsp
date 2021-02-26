@@ -22,9 +22,32 @@ String basePath = request.getScheme() + "://" + request.getServerName() + ":"
 	$(function(){
 		
 		
-		
+	showTranList();	
 	});
 	
+    function showTranList() {
+		$.ajax({
+			url:"workbench/transaction/showTranList.do",
+			type:"post",
+			dataType:"json",
+			success:function (data){
+				var	html="";
+				$.each(data,function (i,n) {
+				html += '<tr>';
+				html += '<td><input type="checkbox" /></td>';
+				html += '<td><a style="text-decoration: none; cursor: pointer;" onclick="window.location.href=\'workbench/transaction/detail.do?id='+n.id+'\';">'+n.name+'</a></td>';
+				html += '<td>'+n.customerId+'</td>';
+				html += '<td>'+n.stage+'</td>';
+				html += '<td>'+n.type+'</td>';
+				html += '<td>'+n.owner+'</td>';
+				html += '<td>'+n.source+'</td>';
+				html += '<td>'+n.contactsId+'</td>';
+				html += '</tr>';
+				})
+					$("#tranBody").html(html);
+				}
+		})
+	}	
 </script>
 </head>
 <body>
@@ -155,8 +178,8 @@ String basePath = request.getScheme() + "://" + request.getServerName() + ":"
 							<td>联系人名称</td>
 						</tr>
 					</thead>
-					<tbody>
-						<tr>
+					<tbody id="tranBody" >
+						<%--<tr>
 							<td><input type="checkbox" /></td>
 							<td><a style="text-decoration: none; cursor: pointer;" onclick="window.location.href='workbench/transaction/detail.jsp';">动力节点-交易01</a></td>
 							<td>动力节点</td>
@@ -175,7 +198,7 @@ String basePath = request.getScheme() + "://" + request.getServerName() + ":"
                             <td>zhangsan</td>
                             <td>广告</td>
                             <td>李四</td>
-                        </tr>
+                        </tr>--%>
 					</tbody>
 				</table>
 			</div>

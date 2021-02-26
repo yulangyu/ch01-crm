@@ -68,6 +68,7 @@ public class ClueController extends HttpServlet {
             String createTime = DateTimeUtil.getSysTime();
 
             t.setId(id);
+            t.setName(name);
             t.setMoney(money);
             t.setExpectedDate(expectedDate);
             t.setStage(stage);

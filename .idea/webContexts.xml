@@ -8,6 +8,8 @@
         <entry key="file://$PROJECT_DIR$/src/main/webapp/workbench/activity/detail.jsp" value="file://$PROJECT_DIR$/src/main/webapp/workbench/activity" />
         <entry key="file://$PROJECT_DIR$/src/main/webapp/workbench/clue/index.jsp" value="file://$PROJECT_DIR$/src/main/webapp/workbench/clue" />
         <entry key="file://$PROJECT_DIR$/src/main/webapp/workbench/index.jsp" value="file://$PROJECT_DIR$/src/main/webapp/workbench" />
+        <entry key="file://$PROJECT_DIR$/src/main/webapp/workbench/transaction/index.jsp" value="file://$PROJECT_DIR$/src/main/webapp/workbench/transaction" />
+        <entry key="file://$PROJECT_DIR$/src/main/webapp/workbench/transaction/save.jsp" value="file://$PROJECT_DIR$/src/main/webapp/workbench/transaction" />
       </map>
     </option>
   </component>

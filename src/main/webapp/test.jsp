@@ -22,6 +22,25 @@ String basePath = request.getScheme() + "://" + request.getServerName() + ":"
                 todayBtn: true,
                 pickerPosition: "bottom-left"
             })
+
+            //自动补全插件
+            $("#create-customerName").typeahead({
+                source: function (query, process) {
+                    $.post(
+                        "workbench/transaction/getCustomerName.do",
+                        { "name" : query },
+                        function (data) {
+                            //alert(data);
+                            process(data);
+                        },
+                        "json"
+                    );
+                },
+                delay: 1500
+            });
+
+
+
         })
         
     </script>

@@ -8,9 +8,7 @@ import com.bjpowernode.crm.utils.ServiceFactory;
 import javax.servlet.ServletContext;
 import javax.servlet.ServletContextEvent;
 import javax.servlet.ServletContextListener;
-import java.util.List;
-import java.util.Map;
-import java.util.Set;
+import java.util.*;
 
 /**
  * @author: yulangyu
@@ -38,6 +36,19 @@ public class SysInitListener implements ServletContextListener {
         for (String key :set) {
             application.setAttribute(key,map.get(key));
         }
+        System.out.println("数据字典处理结束");
+        ResourceBundle rb =ResourceBundle.getBundle("Stage2Possibility");//后缀名一定要去掉
+        Enumeration<String> e = rb.getKeys();
+        Map<String,String> pMap=new HashMap<String,String>();
+        while (e.hasMoreElements()){
+            //阶段
+            String key =e.nextElement();
+            //可能性
+            String value = rb.getString(key);
+            pMap.put(key,value);
+        }
+        application.setAttribute("pMap",pMap);
+
     }
 
     @Override
