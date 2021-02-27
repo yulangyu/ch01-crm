@@ -13,7 +13,10 @@ import com.bjpowernode.crm.workbench.domain.Customer;
 import com.bjpowernode.crm.workbench.domain.Tran;
 import com.bjpowernode.crm.workbench.domain.TranHistory;
 import com.bjpowernode.crm.workbench.service.TranService;
+
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 
 /**
@@ -26,6 +29,42 @@ public class TranServiceImpl implements TranService {
     private TranDao tranDao = SqlSessionUtil.getSqlSession().getMapper(TranDao.class);
     private TranHistoryDao tranHistoryDao = SqlSessionUtil.getSqlSession().getMapper(TranHistoryDao.class);
     private CustomerDao customerDao  = SqlSessionUtil.getSqlSession().getMapper(CustomerDao.class);
+
+    @Override
+    public Map<String, Object> getCharts() {
+        //取得total
+        int total = tranDao.getTotal();
+
+        List<Map<String,Object>> mapList = tranDao.getCharts();
+        //取得dataList
+        Map<String,Object> map = new HashMap<String,Object>();
+        map.put("total",total);
+        map.put("dataList",mapList);
+        return map;
+    }
+
+    @Override
+    public boolean changeStage(Tran t) {
+        boolean flag = true;
+        int count = tranDao.changeStage(t);
+        if (count!=1){
+            flag = false;
+        }
+        //生成一条交易历史
+        TranHistory th = new TranHistory();
+        th.setId(UUIDUtil.getUUID());
+        th.setStage(t.getStage());
+        th.setMoney(t.getMoney());
+        th.setExpectedDate(t.getExpectedDate());
+        th.setCreateTime(t.getEditTime());
+        th.setCreateBy(t.getEditBy());
+        th.setTranId(t.getId());
+        int count2=tranHistoryDao.save(th);
+        if (count2!=1){
+            flag = false;
+        }
+        return flag;
+    }
 
     @Override
     public List<TranHistory> getTranHistoryList(String tranId) {

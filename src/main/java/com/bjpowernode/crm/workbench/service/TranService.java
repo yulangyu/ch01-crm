@@ -24,4 +24,8 @@ public interface TranService {
     boolean saveTran(Tran t,String customerName);
 
     List<TranHistory> getTranHistoryList(String tranId);
+
+    boolean changeStage(Tran t);
+
+    Map<String, Object> getCharts();
 }

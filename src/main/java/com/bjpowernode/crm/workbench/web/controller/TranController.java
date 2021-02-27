@@ -11,12 +11,14 @@ import com.bjpowernode.crm.workbench.service.CustomerService;
 import com.bjpowernode.crm.workbench.service.TranService;
 import com.bjpowernode.crm.workbench.service.impl.CustomerServiceImpl;
 import com.bjpowernode.crm.workbench.service.impl.TranServiceImpl;
+import org.apache.ibatis.ognl.ObjectElementsAccessor;
 
 import javax.servlet.ServletException;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
+import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.Set;
@@ -43,7 +45,45 @@ public class TranController extends HttpServlet {
             save(request,response);
         }else if ("/workbench/transaction/showHistoryList.do".equals(path)){
             showHistoryList(request,response);
+        }else if ("/workbench/transaction/changeStage.do".equals(path)){
+            changeStage(request,response);
+        }else if ("/workbench/transaction/getCharts.do".equals(path)){
+            getCharts(request,response);
         }
+    }
+
+    private void getCharts(HttpServletRequest request, HttpServletResponse response) {
+        System.out.println("取得交易阶段数量统计图表的数据");
+        TranService ts = (TranService) ServiceFactory.getService(new TranServiceImpl());
+        Map<String,Object> map =  ts.getCharts();
+        PrintJson.printJsonObj(response,map);
+    }
+
+    private void changeStage(HttpServletRequest request, HttpServletResponse response) {
+        System.out.println("执行改变阶段的操作");
+        String id = request.getParameter("id");
+        String stage = request.getParameter("stage");
+        String money = request.getParameter("money");
+        String expectedDate = request.getParameter("expectedDate");
+        String editTime = DateTimeUtil.getSysTime();
+        String editBy = ((User)request.getSession().getAttribute("user")).getName();
+        Tran t = new Tran();
+        t.setId(id);
+        t.setStage(stage);
+        t.setMoney(money);
+        t.setExpectedDate(expectedDate);
+        t.setEditTime(editTime);
+        t.setEditBy(editBy);
+        Map<String,String> pMap = (Map<String, String>) request.getServletContext().getAttribute("pMap");
+        String possibility = pMap.get(stage);
+        t.setPossibility(possibility);
+        TranService ts = (TranService) ServiceFactory.getService(new TranServiceImpl());
+        boolean flag = ts.changeStage(t);
+        Map<String, Object> map = new HashMap<String,Object>();
+        map.put("success",flag);
+        map.put("t",t);
+        PrintJson.printJsonObj(response,map);
+
     }
 
     private void showHistoryList(HttpServletRequest request, HttpServletResponse response) {
@@ -121,10 +161,11 @@ public class TranController extends HttpServlet {
     private void detail(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
         System.out.println("进入到展现细节页面");
         String id = request.getParameter("id");
-        System.out.println("点开交易的id是？？？"+id);
+
         TranService ts = (TranService) ServiceFactory.getService(new TranServiceImpl());
         Tran t  = ts.detail(id);
         request.setAttribute("t",t);
+        //System.out.println("程序执行到这里了吗？"+t.getStage());
         request.getRequestDispatcher("/workbench/transaction/detail.jsp").forward(request,response);
 
     }

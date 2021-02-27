@@ -93,5 +93,7 @@
     <url-pattern>/workbench/transaction/getCustomerName.do</url-pattern>
     <url-pattern>/workbench/transaction/save.do</url-pattern>
     <url-pattern>/workbench/transaction/showHistoryList.do</url-pattern>
+    <url-pattern>/workbench/transaction/changeStage.do</url-pattern>
+    <url-pattern>/workbench/transaction/getCharts.do</url-pattern>
   </servlet-mapping>
 </web-app>
